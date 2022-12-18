@@ -1,4 +1,3 @@
-import plaid
 from plaid.api import plaid_api
 from plaid.api.plaid_api import PlaidApi
 from plaid.model.transactions_sync_request import TransactionsSyncRequest
@@ -12,11 +11,15 @@ from plaid.model.depository_account_subtypes import DepositoryAccountSubtypes
 from plaid.model.depository_account_subtype import DepositoryAccountSubtype
 from plaid.model.products import Products
 from plaid.model.country_code import CountryCode
+import logging
+import plaid
+import os
 
 # initiating API client
 
-CLIENT_ID = '58a9e242bdc6a44288ea1bf3'
-SECRET = 'a836d52b1bc3169de6f04cc8cd09c6'
+# TODO: switch to use Flask config
+CLIENT_ID = str(os.getenv('FLASK_PLAID_CLIENT_ID'))
+SECRET = os.getenv('FLASK_PLAID_SECRET')
 
 
 def get_client() -> PlaidApi:
@@ -24,6 +27,8 @@ def get_client() -> PlaidApi:
     obtain Plaid client via instantiation of Plaid API Client
     :return: Plaid client
     """
+    logging.debug("client id: %s" % CLIENT_ID)
+
     configuration = plaid.Configuration(
         host=plaid.Environment.Sandbox,
         api_key={
